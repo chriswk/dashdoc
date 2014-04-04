@@ -7,10 +7,8 @@ import play.api.libs.ws.WS
 class DocDownloader extends Actor with ActorLogging {
   val repoUrl = "http://repo1.maven.org/maven2"
   def receive = {
-    case GAV(groupId, artifactId, version, classifier) => {
-      WS.url(repoUrl + "/" +groupId.replaceAll("\\.", "/") +"/" + artifactId.replaceAll("\\.", "/"))
+    case g@GAV(groupId, artifactId, version, classifier) => {
+      WS.url(repoUrl + "/" + g.url + "/" +g.filePath)
     }
   }
-
-  def
 }

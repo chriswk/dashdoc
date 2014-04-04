@@ -1,13 +1,31 @@
 package actors
 
 import akka.actor.{Actor, ActorLogging}
-import com.sksamuel.elastic4s.{KeywordAnalyzer, ElasticClient}
+import com.sksamuel.elastic4s.ElasticClient
 import com.sksamuel.elastic4s.ElasticDsl._
 
-case class GAV(artifactId: String, groupId: String, version: String, classifier: Option[String]) {
-  def toUrl = {
-    dotToSlash(artifactId) + "/" + dotToSlash(groupId) + "/" + version
+case class GAV(groupId: String, artifactId: String, version: String, classifier: Option[String]) {
+  lazy val url = {
+    dotToSlash(groupId) + "/" + dotToSlash(artifactId) + "/" + version
   }
+  override def toString = {
+    val b = s"${groupId}:${artifactId}:${version}"
+    val p = classifier match {
+      case Some(cl) => s"@${cl}"
+    }
+    b + p
+  }
+  lazy val filePath = {
+    val basePath = s"${artifactId}-${version}"
+    val add = classifier match {
+      case Some(c) => s"-${c}.jar"
+      case None => ".jar"
+    }
+
+    basePath + add
+  }
+
+  lazy val downloadUrl = url + "/" + filePath
 
   def dotToSlash(s: String): String = s.replaceAll("\\.", "/")
 }
@@ -19,6 +37,8 @@ case class IndexRepo(repo: Repo)
 case class CreateRepoIndex()
 
 case class IndexClass(gav: GAV, className: String)
+
+case class IndexArtifact(gav: GAV)
 
 class Indexer extends Actor with ActorLogging {
   val client = ElasticClient.local
@@ -34,9 +54,21 @@ class Indexer extends Actor with ActorLogging {
       }
     }
 
+    case IndexArtifact(gav) => {
+      client.execute {
+        index into "artifacts" -> gav.toString fields {
+          "artifactId" -> gav.artifactId
+          "groupId" -> gav.groupId
+          "version" -> gav.version
+          "classifier" -> gav.classifier
+          "path" -> gav.filePath
+          "url" -> gav.url
+        }
+      }
+    }
     case IndexClass(gav, className) => {
       client.execute {
-        index into "classes" -> gav.artifactId fields {
+        index into "classes" -> gav.toString fields {
           "class" -> className
         }
       }
