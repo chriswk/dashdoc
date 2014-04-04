@@ -10,3 +10,4 @@ libraryDependencies ++= Seq(
 )
 
 play.Project.playScalaSettings
+
