@@ -4,48 +4,16 @@ import play.api.libs.concurrent.Execution.Implicits._
 import akka.actor.{Actor, ActorLogging}
 import com.sksamuel.elastic4s.ElasticClient
 import com.sksamuel.elastic4s.ElasticDsl._
-
-case class GAV(groupId: String, artifactId: String, version: String, classifier: Option[String]) {
-  lazy val url = {
-    dotToSlash(groupId) + "/" + dotToSlash(artifactId) + "/" + version
-  }
-  override def toString = {
-    val b = s"${groupId}:${artifactId}:${version}"
-    val p = classifier match {
-      case Some(cl) => s"@${cl}"
-      case None => ""
-    }
-    b + p
-  }
-  lazy val filePath = {
-    val basePath = s"${artifactId}-${version}"
-    val add = classifier match {
-      case Some(c) => s"-${c}.jar"
-      case None => ".jar"
-    }
-
-    basePath + add
-  }
-
-  lazy val downloadUrl = url + "/" + filePath
-
-  def dotToSlash(s: String): String = s.replaceAll("\\.", "/")
-}
-
-case class Repo(id: String, name: String, url: String)
-
-case class IndexRepo(repo: Repo)
-
-case class CreateRepoIndex()
-
-case class IndexClass(gav: GAV, className: String)
-
-case class IndexArtifact(gav: GAV)
-
-case class IndexComplete(index: String, id: String, indexType: String, version: Long)
+import model._
+import play.Configuration
 
 class Indexer extends Actor with ActorLogging {
-  val client = ElasticClient.local
+  val c = Configuration.root()
+  val client = {
+    val url = c.getString("elasticsearch.url")
+    val port = c.getInt("elasticsearch.port")
+    ElasticClient.remote(url, port)
+  }
 
   def receive = {
     case IndexRepo(repo) => {
@@ -75,10 +43,14 @@ class Indexer extends Actor with ActorLogging {
         case res => self ! IndexComplete(res.getIndex, res.getId, res.getType, res.getVersion)
       }
     }
-    case IndexClass(gav, className) => {
+    case IndexClass(info) => {
       client.execute {
-        index into "classes" -> gav.toString fields {
-          "class" -> className
+        index into "classes" fields {
+          "class" -> info.name
+          "signature" -> info.signature
+          "parentClass" -> info.superClassName
+          "location" -> info.location
+          "interfaces" -> info.interfaces
         }
       } onSuccess {
         case res => sender ! IndexComplete(res.getIndex, res.getId, res.getType, res.getVersion)
