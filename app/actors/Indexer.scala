@@ -4,7 +4,13 @@ import akka.actor.{Actor, ActorLogging}
 import com.sksamuel.elastic4s.{KeywordAnalyzer, ElasticClient}
 import com.sksamuel.elastic4s.ElasticDsl._
 
-case class GAV(artifactId: String, groupId: String, version: String, classifier: Option[String])
+case class GAV(artifactId: String, groupId: String, version: String, classifier: Option[String]) {
+  def toUrl = {
+    dotToSlash(artifactId) + "/" + dotToSlash(groupId) + "/" + version
+  }
+
+  def dotToSlash(s: String): String = s.replaceAll("\\.", "/")
+}
 
 case class Repo(id: String, name: String, url: String)
 
