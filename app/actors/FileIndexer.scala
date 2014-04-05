@@ -2,6 +2,7 @@ package actors
 
 import akka.actor.{Props, Actor, ActorLogging}
 import play.api.libs.concurrent.Akka
+import play.api.Play.current
 import java.nio.file.Path
 import model.IndexPath
 
