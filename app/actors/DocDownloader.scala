@@ -11,11 +11,15 @@ import play.api.libs.iteratee.{Done, Input, Cont, Iteratee}
 
 class DocDownloader extends Actor with ActorLogging {
   val repoUrl = "http://repo1.maven.org/maven2"
-  val fileFolder = Configuration.root().getString("artifact.path")
+  val fileFolderPath = Configuration.root().getString("artifact.path")
+  val fileFolder = new File(fileFolderPath)
+
   def receive = {
     case g@GAV(groupId, artifactId, version, classifier) => {
-      val outputStream = new BufferedOutputStream(new FileOutputStream(new File(fileFolder, g.filePath)))
-      val response = WS.url(repoUrl + "/" + g.url + "/" +g.filePath).get {
+      val downloadPath = new File(fileFolder, g.url)
+      downloadPath.mkdirs()
+      val outputStream = new BufferedOutputStream(new FileOutputStream(new File(downloadPath, g.filePath)))
+      val response = WS.url(s"${repoUrl}/${g.downloadUrl}").get {
         headers => fromStream(outputStream)
       }.flatMap(_.run)
     }

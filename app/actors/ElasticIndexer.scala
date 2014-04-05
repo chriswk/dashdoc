@@ -7,7 +7,7 @@ import com.sksamuel.elastic4s.ElasticDsl._
 import model._
 import play.Configuration
 
-class Indexer extends Actor with ActorLogging {
+class ElasticIndexer extends Actor with ActorLogging {
   val c = Configuration.root()
   val client = {
     val url = c.getString("elasticsearch.url")

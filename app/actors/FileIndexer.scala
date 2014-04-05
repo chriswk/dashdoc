@@ -1,32 +1,30 @@
 package actors
 
 import akka.actor.{Props, Actor, ActorLogging}
-import model.{IndexClass, IndexFolder}
-import org.clapper.classutil.ClassFinder
-import scala.reflect.io.Path
 import play.api.libs.concurrent.Akka
-import play.api.Play.current
+import java.nio.file.Path
+import model.IndexPath
 
 class FileIndexer extends Actor with ActorLogging {
-  val indexer = Akka.system.actorOf(Props[Indexer])
+  val jarIndexer = Akka.system.actorOf(Props[JarExtracter])
+  val javadocIndexer = Akka.system.actorOf(Props[JavadocIndexer])
+  val sourcesIndexer = Akka.system.actorOf(Props[SourcesIndexer])
 
   def receive = {
-    case IndexFolder(path: String) => {
-      val jarFiles = findJarFiles(path)
-      jarFiles.map(_.jfile).foreach {
-        file =>
-          val finder = ClassFinder(List(file))
-          finder.getClasses.filter(_.isConcrete).foreach { f =>
-            log.info(s"Indexing ${f}")
-            indexer ! IndexClass(f)
-          }
+    case msg@IndexPath(path: Path) => {
+      val f = path.toFile
+      if (f.getName().endsWith("pom.xml")) {
+        log.info("pom to index")
+      } else if (f.getName.endsWith("javadoc.jar")) {
+        javadocIndexer ! msg
+      } else if (f.getName.endsWith("sources.jar")) {
+        sourcesIndexer ! msg
+      } else if (f.getName.endsWith(".jar")) {
+        jarIndexer ! msg
+      } else {
+        log.info("Don't know what to do with: ${f}")
       }
     }
   }
 
-  def findJarFiles(path: String) = {
-    Path(path) walkFilter { p =>
-      p.isDirectory || ".jar".r.findFirstIn(p.name).isDefined
-    }
-  }
 }
