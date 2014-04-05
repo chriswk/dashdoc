@@ -1,13 +1,13 @@
 package actors
 
-import model._
 import akka.actor.{Actor, ActorLogging}
+import model.IndexPath
 import java.nio.file.Path
 
-class JavadocIndexer extends Actor with ActorLogging {
+class PomIndexer extends Actor with ActorLogging {
   def receive = {
     case IndexPath(path: Path) => {
-      log.info(s"Got told to index javadocs for ${path}")
+      log.info(s"Got told to index pom file: ${path}")
     }
   }
 }
