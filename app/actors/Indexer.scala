@@ -45,20 +45,20 @@ class Indexer extends Actor with ActorLogging {
     }
     case IndexClass(info) => {
       client.execute {
-        index into "classes" fields {
-          "class" -> info.name
-          "signature" -> info.signature
-          "parentClass" -> info.superClassName
-          "location" -> info.location
+        index into "classes" -> "class" fields(
+          "class" -> info.name,
+          "signature" -> info.signature,
+          "parentClass" -> info.superClassName,
+          "location" -> info.location,
           "interfaces" -> info.interfaces
-        }
+        )
       } onSuccess {
         case res => sender ! IndexComplete(res.getIndex, res.getId, res.getType, res.getVersion)
       }
     }
 
     case comp@IndexComplete => {
-      log.error(s"Completed indexing of ${comp}")
+      log.info(s"Completed indexing of ${comp}")
     }
 
   }
