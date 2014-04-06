@@ -6,13 +6,17 @@ import com.sksamuel.elastic4s.ElasticClient
 import com.sksamuel.elastic4s.ElasticDsl._
 import model._
 import play.Configuration
+import org.elasticsearch.common.settings.ImmutableSettings
 
 class ElasticIndexer extends Actor with ActorLogging {
   val c = Configuration.root()
   val client = {
+    val cluster = c.getString("elasticsearch.cluster")
     val url = c.getString("elasticsearch.url")
     val port = c.getInt("elasticsearch.port")
-    ElasticClient.remote(url, port)
+    val settings = ImmutableSettings.builder().put("cluster.name", cluster).build()
+    log.info(s"Connecting to ${url}:${port}, cluster: ${cluster}")
+    ElasticClient.remote(settings, (url, port.toInt))
   }
 
   def receive = {
