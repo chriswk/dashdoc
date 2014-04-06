@@ -26,7 +26,7 @@ class FileIndexer extends Actor with ActorLogging {
         log.info("binary to index")
         jarIndexer ! msg
       } else {
-        log.info("Don't know what to do with: ${f}")
+        log.info(s"Don't know what to do with: ${f}")
       }
     }
   }
