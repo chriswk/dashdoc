@@ -9,4 +9,5 @@ case class IndexArtifact(gav: GAV)
 case class IndexRepo(repo: Repo)
 case class IndexPath(path: Path)
 case class WatchFolder(path: Path)
+case class CreateClassIndex()
 

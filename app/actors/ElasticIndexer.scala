@@ -2,11 +2,12 @@ package actors
 
 import play.api.libs.concurrent.Execution.Implicits._
 import akka.actor.{Actor, ActorLogging}
-import com.sksamuel.elastic4s.ElasticClient
+import com.sksamuel.elastic4s.{KeywordAnalyzer, ElasticClient}
 import com.sksamuel.elastic4s.ElasticDsl._
 import model._
 import play.Configuration
 import org.elasticsearch.common.settings.ImmutableSettings
+import com.sksamuel.elastic4s.mapping.FieldType.StringType
 
 class ElasticIndexer extends Actor with ActorLogging {
   val c = Configuration.root()
@@ -49,15 +50,30 @@ class ElasticIndexer extends Actor with ActorLogging {
     }
     case IndexClass(info) => {
       client.execute {
-        index into "classes" -> "class" fields(
-          "class" -> info.name,
+        index into "classes" -> "class" fields (
+          "className" -> info.name.substring(info.name.lastIndexOf(".")+1),
+          "absolute" -> info.name,
           "signature" -> info.signature,
           "parentClass" -> info.superClassName,
           "location" -> info.location,
-          "interfaces" -> info.interfaces
+          "gav" -> ModelHelper.path2Gav(info.location.toPath),
+          "interfaces" -> info.interfaces,
+          "methods" -> info.methods.toList
         )
       } onSuccess {
         case res => sender ! IndexComplete(res.getIndex, res.getId, res.getType, res.getVersion)
+      }
+    }
+
+    case CreateClassIndex() => {
+      client.execute {
+        create index "classes" mappings (
+          "class" as(
+            "absolute" typed StringType analyzer KeywordAnalyzer,
+            "signature" typed StringType analyzer KeywordAnalyzer,
+            "gav" typed StringType analyzer KeywordAnalyzer
+            )
+          )
       }
     }
 

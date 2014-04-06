@@ -35,7 +35,7 @@ object ModelHelper {
 
 case class GAV(groupId: String, artifactId: String, version: String, classifier: Option[String]) {
   lazy val url = {
-    dotToSlash(groupId) + "/" + dotToSlash(artifactId) + "/" + version
+    dotToSlash(groupId) + "/" + artifactId + "/" + version
   }
 
   override def toString = {
