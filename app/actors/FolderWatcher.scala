@@ -11,7 +11,7 @@ import com.beachape.filemanagement.Messages._
 import model._
 
 class FolderWatcher extends Actor with ActorLogging {
-  val fileMonitorActor = Akka.system.actorOf(Props[MonitorActor])
+  val fileMonitorActor = Akka.system.actorOf(MonitorActor(concurrency = 2))
   val folderIndexer = Akka.system.actorOf(Props[FolderIndexer])
   val fileIndexer = Akka.system.actorOf(Props[FileIndexer])
   val folderWatcherCallback: Callback = { path =>

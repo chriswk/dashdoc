@@ -4,6 +4,12 @@ version := "1.0-SNAPSHOT"
 
 resolvers += "JCenter" at "http://jcenter.bintray.com/"
 
+val akkaVersion = "2.2.0"
+
+dependencyOverrides += "com.typesafe.akka" %% "akka-actor" % akkaVersion
+
+dependencyOverrides += "com.typesafe.akka" %% "akka-agent" % akkaVersion
+
 libraryDependencies ++= Seq(
   jdbc,
   anorm,

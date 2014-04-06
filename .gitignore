@@ -15,3 +15,4 @@ dist
 /.settings
 data
 files
+.DS_Store
