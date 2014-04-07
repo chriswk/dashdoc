@@ -13,7 +13,7 @@ class JarIndexer extends Actor with ActorLogging {
     case IndexPath(path: Path) => {
       log.info(s"Got told to index classes for ${path}")
       val finder = ClassFinder(List(path.toFile))
-      finder.getClasses.filter(_.isConcrete).foreach { f =>
+      finder.getClasses.filter(cl => cl.isConcrete && !cl.name.contains("$")).foreach { f =>
         log.info(s"Indexing ${f}")
         elasticIndexer ! IndexClass(f)
       }
