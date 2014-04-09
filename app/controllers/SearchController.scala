@@ -30,4 +30,14 @@ object SearchController extends Controller {
     })
   }
 
+  def searchForClassName(classname: String) = Action.async {
+    client.execute {
+      search in "classes" -> "class" query (
+        "className" -> classname
+      )
+    }.map(r => {
+      Ok(r.toString)
+    })
+  }
+
 }
