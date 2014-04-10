@@ -12,7 +12,7 @@ class FileIndexer extends Actor with ActorLogging {
   val sourcesIndexer = Akka.system.actorOf(Props[SourcesIndexer])
 
   def receive = {
-    case msg@IndexPath(path: Path) => {
+    case msg@IndexPath(path: Path, rootDir: Path) => {
       val f = path.toFile
       if (f.getName().endsWith("pom.xml")) {
         log.info("pom to index")

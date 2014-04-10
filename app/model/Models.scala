@@ -6,15 +6,16 @@ import java.io.File
 import java.util.regex.Matcher
 
 object ModelHelper {
+  val logger = play.api.Logger
   val config = Configuration.root()
   val repoFolder = Paths.get(config.getString("artifact.path"))
 
   import java.nio.file.Path
 
-  def path2Gav(path: Path) = {
+  def path2Gav(path: Path, rootDir: Path) = {
     val versionPath = path.getParent
     val artifactPath = versionPath.getParent
-    val groupPath = artifactPath.subpath(1, artifactPath.getNameCount - 1)
+    val groupPath = rootDir.relativize(path).subpath(0, artifactPath.getNameCount() - 1)
     val classifier: Option[String] = {
       val fileName = path.toFile.getName
       if (fileName.endsWith("javadoc.jar")) {

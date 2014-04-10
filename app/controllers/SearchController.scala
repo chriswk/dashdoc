@@ -7,8 +7,6 @@ import com.sksamuel.elastic4s.ElasticClient
 import com.sksamuel.elastic4s.ElasticDsl._
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.json._
-import org.elasticsearch.action.search.SearchResponse
 
 
 object SearchController extends Controller {

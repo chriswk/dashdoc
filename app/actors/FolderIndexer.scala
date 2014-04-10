@@ -10,13 +10,13 @@ class FolderIndexer extends Actor with ActorLogging {
   val fileIndexer = Akka.system.actorOf(Props[FileIndexer])
 
   def receive = {
-    case IndexPath(path: Path) => {
+    case msg@IndexPath(path: Path, _) => {
       path.toFile.listFiles.foreach {
         f => {
           if (f.isDirectory) {
-            self ! IndexPath(f.toPath)
+            self ! msg
           } else {
-            fileIndexer ! IndexPath(f.toPath)
+            fileIndexer ! msg
           }
         }
       }

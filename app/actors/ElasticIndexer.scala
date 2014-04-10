@@ -48,7 +48,7 @@ class ElasticIndexer extends Actor with ActorLogging {
         case res => self ! IndexComplete(res.getIndex, res.getId, res.getType, res.getVersion)
       }
     }
-    case IndexClass(info) => {
+    case IndexClass(info, rootDir) => {
       client.execute {
         index into "classes" -> "class" fields (
           "className" -> info.name.substring(info.name.lastIndexOf(".")+1),
@@ -56,7 +56,7 @@ class ElasticIndexer extends Actor with ActorLogging {
           "signature" -> info.signature,
           "parentClass" -> info.superClassName,
           "location" -> info.location,
-          "gav" -> ModelHelper.path2Gav(info.location.toPath),
+          "gav" -> ModelHelper.path2Gav(info.location.toPath, rootDir),
           "interfaces" -> info.interfaces,
           "methods" -> info.methods.toList
         )
