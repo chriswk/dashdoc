@@ -7,6 +7,8 @@ import com.sksamuel.elastic4s.ElasticClient
 import com.sksamuel.elastic4s.ElasticDsl._
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.data._
+import play.api.data.Forms._
 
 
 object SearchController extends Controller {
@@ -20,22 +22,27 @@ object SearchController extends Controller {
     ElasticClient.remote(settings, (url, port.toInt))
   }
 
+  val searchForm = Form("name" -> text)
+
+
+
   def searchForClass = Action.async {
     client.execute {
-      search in "classes" -> "class"
+      search in "classes" -> "class" facets (
+        facet terms "Coord" field "gav",
+        facet terms "File" field "location"
+        )
     }.map(r => {
       Ok(r.toString)
     })
   }
 
-  def searchForClassName(classname: String) = Action.async {
-    client.execute {
-      search in "classes" -> "class" query (
-        "className" -> classname
-      )
-    }.map(r => {
-      Ok(r.toString)
-    })
+  def searchForClassName = Action.async { implicit request =>
+      val className = searchForm.bindFromRequest().get
+      Logger.info(s"Searching for ${className}")
+      client.execute {
+        search in "classes" -> "class" query className
+      }.map(r => Ok(r.toString))
   }
 
 }
