@@ -7,8 +7,11 @@ GET     /                           controllers.Application.index
 
 # Class search
 
-GET     /classes                    controllers.SearchController.searchForClass
-POST    /classes                    controllers.SearchController.searchForClassName
+GET     /classes                    controllers.Search.searchForClass
+POST    /classes                    controllers.Search.searchForClassName
+
+GET     /download                   controllers.Download.index
+POST    /download                   controllers.Download.download
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 

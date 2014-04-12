@@ -11,7 +11,7 @@ import play.api.data._
 import play.api.data.Forms._
 
 
-object SearchController extends Controller {
+object Search extends Controller {
   val c = Configuration.root()
   val client = {
     val cluster = c.getString("elasticsearch.cluster")

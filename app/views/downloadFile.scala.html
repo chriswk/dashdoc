@@ -1,0 +1,10 @@
+@(downloadForm: Form[model.GAV])
+
+
+
+@helper.form(action = routes.Download.download) {
+        @helper.inputText(downloadForm("groupId"))
+        @helper.inputText(downloadForm("artifactId"))
+        @helper.inputText(downloadForm("version"))
+        <input type="submit" />
+}
