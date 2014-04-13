@@ -16,6 +16,7 @@ class FolderWatcher extends Actor with ActorLogging {
   val fileIndexer = Akka.system.actorOf(Props[FileIndexer])
   val folderWatcherCallback: Callback = { path =>
     val msg = IndexPath(path, path)
+    log.info(s"Received msg: ${msg}")
     if (path.toFile.isDirectory) {
       folderIndexer ! msg
     } else {
@@ -26,7 +27,12 @@ class FolderWatcher extends Actor with ActorLogging {
     case WatchFolder(path: Path) => {
       fileMonitorActor ! RegisterCallback(
         ENTRY_CREATE,
-        None,
+        recursive = true,
+        path = path,
+        folderWatcherCallback
+      )
+      fileMonitorActor ! RegisterCallback(
+        ENTRY_MODIFY,
         recursive = true,
         path = path,
         folderWatcherCallback
