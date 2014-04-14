@@ -1,0 +1,29 @@
+@(searchForm: Form[controllers.Search.ClassSearch])
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Find your class") {
+    <div id="typeahead">
+        <input class="typeahead" type="text" placeholder="Classname">
+    </div>
+}{
+<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("typeahead.bundle.min.js"))'></script>
+<script type="text/javascript">
+    var engine = new Bloodhound({
+        name: 'classnames',
+        remote: "@routes.Search.searchForClassName?name=%QUERY%",
+        datumTokenizer: function(d) {
+            return Bloodhound.tokenizers.whitespace(d.val);
+        },
+        queryTokenizer: Bloodhound.tokenizers.whitespace
+    });
+    engine.initialize();
+    $("#typeahead .typeahead").typeahead({
+        hint: true,
+        name: 'classnames',
+        highlight: true,
+        minLength: 1,
+        source: engine.ttAdapter()
+    });
+</script>
+}

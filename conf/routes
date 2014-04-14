@@ -7,12 +7,13 @@ GET     /                           controllers.Application.index
 
 # Class search
 
-GET     /classes                    controllers.Search.searchForClass
-POST    /classes                    controllers.Search.searchForClassName
+GET     /search                    controllers.Search.searchForClass
+POST    /search                    controllers.Search.searchForClassName
 
 GET     /download                   controllers.Download.index
 POST    /download                   controllers.Download.download
 # Map static resources from the /public folder to the /assets URL path
+GET     /webjars/*file                    controllers.WebJarAssets.at(file)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 

@@ -1,10 +1,15 @@
 @(downloadForm: Form[model.GAV])
+@import helper.twitterBootstrap._
+@import helper._
 
-
-
-@helper.form(action = routes.Download.download) {
-        @helper.inputText(downloadForm("groupId"))
-        @helper.inputText(downloadForm("artifactId"))
-        @helper.inputText(downloadForm("version"))
+@main("Download new library") {
+<div class="content">
+@form(action = routes.Download.download) {
+        @inputText(downloadForm("groupId"))
+        @inputText(downloadForm("artifactId"))
+        @inputText(downloadForm("version"))
         <input type="submit" />
 }
+</div>
+}{
+<!-- No js needed yet -->}

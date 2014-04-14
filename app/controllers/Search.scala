@@ -22,27 +22,26 @@ object Search extends Controller {
     ElasticClient.remote(settings, (url, port.toInt))
   }
 
-  val searchForm = Form("name" -> text)
+  case class ClassSearch(name: String)
 
+  val searchForm = Form(
+    mapping(
+      "name" -> text()
+    )(ClassSearch.apply)(ClassSearch.unapply)
+  )
 
-
-  def searchForClass = Action.async {
-    client.execute {
-      search in "classes" -> "class" facets (
-        facet terms "Coord" field "gav",
-        facet terms "File" field "location"
-        )
-    }.map(r => {
-      Ok(r.toString)
-    })
+  def searchForClass = Action {
+    Ok(views.html.search(searchForm))
   }
 
   def searchForClassName = Action.async { implicit request =>
-      val className = searchForm.bindFromRequest().get
-      Logger.info(s"Searching for ${className}")
-      client.execute {
-        search in "classes" -> "class" query className
-      }.map(r => Ok(r.toString))
+    val className = searchForm.bindFromRequest().get
+    Logger.info(s"Searching for ${className}")
+    client.execute {
+      search in "classes" -> "class" query {
+        prefix("className", className)
+      }
+    }.map(r => Ok(r.toString))
   }
 
 }

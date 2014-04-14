@@ -20,7 +20,7 @@ object Download extends Controller {
     )(GAV.apply)(GAV.unapply)
   )
 
-  def index = Action {
+  def index = Action { implicit request =>
     Ok(views.html.downloadFile(downloadForm))
   }
 
