@@ -13,8 +13,14 @@ GET     /searchclass                    controllers.Search.searchForClassName
 
 GET     /download                   controllers.Download.index
 POST    /download                   controllers.Download.download
-# Map static resources from the /public folder to the /assets URL path
+
+
+# Setup routes for javascript files
+GET /javascriptRoutes  controllers.JsRouter.javascriptRoutes
+
+# WebJars
 GET     /webjars/*file                    controllers.WebJarAssets.at(file)
+# Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 

@@ -9,6 +9,8 @@ import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.data._
 import play.api.data.Forms._
+import play.api.libs.json.Json
+import org.elasticsearch.search.SearchHit
 
 
 object Search extends Controller {
@@ -38,10 +40,11 @@ object Search extends Controller {
     val className = searchForm.bindFromRequest().get
     Logger.info(s"Searching for ${className}")
     client.execute {
-      search in "classes" -> "class" query {
-        prefix("className", className)
-      }
-    }.map(r => Ok(r.toString))
+      search in "classes" query { matchall }
+    }.map(r => {
+      val h = r.getHits.hits.map(h => h.sourceAsMap().get("class").toString)
+      Ok(Json.toJson(h))
+    })
   }
 
 }
