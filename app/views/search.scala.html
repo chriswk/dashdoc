@@ -11,14 +11,16 @@
 <script type="text/javascript">
     var engine = new Bloodhound({
         name: 'classnames',
-        remote: "@routes.Search.searchForClassName?name=%QUERY%",
+        remote: {
+            url: "@routes.Search.searchForClassName?name=%QUERY"
+        },
         datumTokenizer: function(d) {
             return Bloodhound.tokenizers.whitespace(d.val);
         },
         queryTokenizer: Bloodhound.tokenizers.whitespace
     });
     engine.initialize();
-    $("#typeahead .typeahead").typeahead({
+    $("#typeahead .typeahead").typeahead(null, {
         hint: true,
         name: 'classnames',
         highlight: true,

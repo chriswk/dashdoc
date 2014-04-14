@@ -15,7 +15,7 @@ libraryDependencies ++= Seq(
   anorm,
   cache,
   "com.sksamuel.elastic4s" %% "elastic4s" % "1.1.0.0",
-  "org.clapper" % "classutil_2.10" % "1.0.4",
+  "org.clapper" %% "classutil" % "1.0.4",
   "com.beachape.filemanagement" %% "schwatcher" % "0.0.9",
   "org.webjars" %% "webjars-play" % "2.2.1-2",
   "org.webjars" % "bootstrap" % "3.1.1",

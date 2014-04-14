@@ -8,7 +8,8 @@ GET     /                           controllers.Application.index
 # Class search
 
 GET     /search                    controllers.Search.searchForClass
-POST    /search                    controllers.Search.searchForClassName
+POST    /searchclass                    controllers.Search.searchForClassName
+GET     /searchclass                    controllers.Search.searchForClassName
 
 GET     /download                   controllers.Download.index
 POST    /download                   controllers.Download.download
