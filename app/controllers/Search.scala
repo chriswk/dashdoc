@@ -10,7 +10,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.data._
 import play.api.data.Forms._
 import play.api.libs.json.Json
-import org.elasticsearch.search.SearchHit
+import org.elasticsearch.search.{SearchHit, SearchHits}
 
 
 object Search extends Controller {
@@ -42,8 +42,7 @@ object Search extends Controller {
     client.execute {
       search in "classes" -> "class" query { className.name }
     }.map(r => {
-      val h = r.getHits.hits.map(h => h.sourceAsMap().get("class").toString)
-      Ok(Json.toJson(h))
+      Ok(r.toString).as("application/json")
     })
   }
 

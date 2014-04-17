@@ -14,6 +14,7 @@ GET     /searchclass                    controllers.Search.searchForClassName
 GET     /download                   controllers.Download.index
 POST    /download                   controllers.Download.download
 
+GET     /indexAll                   controllers.Indexer.indexAll
 
 # Setup routes for javascript files
 GET /javascriptRoutes  controllers.JsRouter.javascriptRoutes
