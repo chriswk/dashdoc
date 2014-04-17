@@ -21,6 +21,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "bootstrap" % "3.1.1",
   "org.webjars" % "typeaheadjs" % "0.10.2",
   "org.webjars" % "jquery" % "1.11.0-1",
+  "org.webjars" % "handlebars" % "2.0.0-alpha.2",
   "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test"
 )
 

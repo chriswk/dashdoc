@@ -3,8 +3,9 @@ var engine = new Bloodhound({
     remote: {
         url: jsRoutes.controllers.Search.searchForClassName().url +"?name=%QUERY",
         filter: function (response) {
-            return response.map(function(e) {
-                return { value: e };
+            console.log(response);
+            return response.hits.hits.map(function(e) {
+                return e._source
             });
         }
     },
@@ -20,5 +21,13 @@ $("#typeahead .typeahead").typeahead(null, {
     name: 'classnames',
     highlight: true,
     minLength: 1,
-    source: engine.ttAdapter()
+    source: engine.ttAdapter(),
+    templates: {
+        empty: [
+            '<div class="empty-message">',
+            'unable to find any class matching the current query',
+            '</div>'
+        ].join("\n"),
+        suggestion: Handlebars.compile('<p><strong>{{className}}</strong> - {{absolute}}</p>')
+    }
 });
