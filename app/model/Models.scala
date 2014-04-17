@@ -15,7 +15,8 @@ object ModelHelper {
   def path2Gav(path: Path, rootDir: Path) = {
     val versionPath = path.getParent
     val artifactPath = versionPath.getParent
-    val groupPath = rootDir.relativize(path).subpath(0, artifactPath.getNameCount() - 1)
+    val groupPath = artifactPath.getParent
+    val groupId = rootDir.toAbsolutePath.relativize(groupPath.toAbsolutePath)
     val classifier: Option[String] = {
       val fileName = path.toFile.getName
       if (fileName.endsWith("javadoc.jar")) {
@@ -28,13 +29,13 @@ object ModelHelper {
         None
       }
     }
-    GAV(pathToDot(groupPath), artifactPath.getFileName.toString, versionPath.getFileName.toString, classifier)
+    GAV(pathToDot(groupId), artifactPath.getFileName.toString, versionPath.getFileName.toString, classifier)
   }
 
   def pathToDot(s: Path) = s.toString.replaceAll(Matcher.quoteReplacement(File.separator), ".")
 }
 
-case class GAV(groupId: String, artifactId: String, version: String, classifier: Option[String]) {
+case class GAV(groupId: String, artifactId: String, version: String, classifier: Option[String] = None) {
   lazy val url = {
     dotToSlash(groupId) + "/" + artifactId + "/" + version
   }

@@ -2,7 +2,7 @@ package actors
 
 import akka.actor.{Props, ActorLogging, Actor}
 import java.nio.file.Path
-import model.{IndexClass, IndexPath}
+import model.{IndexComplete, IndexClass, IndexPath}
 import org.clapper.classutil.ClassFinder
 import play.api.libs.concurrent.Akka
 import play.api.Play.current
@@ -17,6 +17,9 @@ class JarIndexer extends Actor with ActorLogging {
         log.info(s"Indexing ${f}")
         elasticIndexer ! IndexClass(f, rootDir)
       }
+    }
+    case msg@IndexComplete => {
+      log.info(s"Finished indexing ${msg}")
     }
   }
 }

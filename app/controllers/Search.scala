@@ -40,7 +40,7 @@ object Search extends Controller {
     val className = searchForm.bindFromRequest().get
     Logger.info(s"Searching for ${className}")
     client.execute {
-      search in "classes" query { matchall }
+      search in "classes" -> "class" query { className.name }
     }.map(r => {
       val h = r.getHits.hits.map(h => h.sourceAsMap().get("class").toString)
       Ok(Json.toJson(h))
