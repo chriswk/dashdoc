@@ -1,15 +1,12 @@
-Dash doc
+Dash doc [![Build Status](https://travis-ci.org/chriswk/dashdoc.svg?branch=master)](https://travis-ci.org/chriswk/dashdoc)
 ==================
-
-Travis
-=======
-[![Build Status](https://travis-ci.org/chriswk/dashdoc.svg?branch=master)](https://travis-ci.org/chriswk/dashdoc)
 
 Config variables
 ================
 * elasticsearch.url
 * elasticsearch.port
 * elasticsearch.cluster
+* artifact.path
 
 
 'Simple' startup
@@ -31,6 +28,7 @@ import java.nio.file.Paths
 new play.core.StaticApplication(new java.io.File("."))
 val folderIndexer = Akka.system.actorOf(Props[FolderIndexer])
 val fileIndexer = Akka.system.actorOf(Props[FileIndexer])
+val folderWatcher = Akka.system.actorOf(Props[FolderWatcher])
 val jarDownloader = Akka.system.actorOf(Props[DocDownloader])
 val elastic = Akka.system.actorOf(Props[ElasticIndexer])
 val x = Paths.get("files")
