@@ -1,6 +1,10 @@
 Dash doc
 ==================
 
+Travis
+=======
+[![Build Status](https://travis-ci.org/chriswk/dashdoc.svg?branch=master)](https://travis-ci.org/chriswk/dashdoc)
+
 Config variables
 ================
 * elasticsearch.url
