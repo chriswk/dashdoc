@@ -3,3 +3,5 @@ jdk:
   - oraclejdk8
 scala:
   - 2.10.4
+cache:
+  - $HOME/.ivy2
