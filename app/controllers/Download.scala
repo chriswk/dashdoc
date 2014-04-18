@@ -7,10 +7,10 @@ import play.api.libs.concurrent.Akka
 import play.api.Play.current
 import model.GAV
 import akka.actor.Props
-import actors.DocDownloader
+import actors.Downloader
 
 object Download extends Controller {
-  val downloadAction = Akka.system.actorOf(Props[DocDownloader])
+  val downloadAction = Akka.system.actorOf(Props[Downloader])
   val downloadForm = Form(
     mapping(
       "groupId" -> text,

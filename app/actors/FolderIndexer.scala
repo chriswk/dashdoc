@@ -11,6 +11,7 @@ class FolderIndexer extends Actor with ActorLogging {
 
   def receive = {
     case msg@IndexPath(path: Path, rootDir: Path) => {
+      require(path.toFile.isDirectory)
       log.info(s"Indexing $msg")
       path.toFile.listFiles.filter(_.toPath.toAbsolutePath != rootDir.toAbsolutePath).foreach {
         f => {
@@ -22,8 +23,6 @@ class FolderIndexer extends Actor with ActorLogging {
         }
       }
     }
-
   }
-
 
 }

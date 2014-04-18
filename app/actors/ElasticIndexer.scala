@@ -50,7 +50,10 @@ class ElasticIndexer extends Actor with ActorLogging {
     }
     case IndexClass(info, rootDir) => {
       val gav = ModelHelper.path2Gav(info.location.toPath, rootDir)
-      log.info(s"indexing ${gav}")
+      log.info(
+        s"""Indexing ${info}
+           | in ${gav}
+         """.stripMargin)
       client.execute {
         index into "classes" -> "class" fields (
           "className" -> info.name.substring(info.name.lastIndexOf(".")+1),

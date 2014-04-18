@@ -29,7 +29,7 @@ new play.core.StaticApplication(new java.io.File("."))
 val folderIndexer = Akka.system.actorOf(Props[FolderIndexer])
 val fileIndexer = Akka.system.actorOf(Props[FileIndexer])
 val folderWatcher = Akka.system.actorOf(Props[FolderWatcher])
-val jarDownloader = Akka.system.actorOf(Props[DocDownloader])
+val downloader = Akka.system.actorOf(Props[Downloader])
 val elastic = Akka.system.actorOf(Props[ElasticIndexer])
 val x = Paths.get("files")
 ```

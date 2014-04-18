@@ -9,7 +9,7 @@ import play.Configuration
 import java.io.{File, BufferedOutputStream, FileOutputStream, OutputStream}
 import play.api.libs.iteratee.{Done, Input, Cont, Iteratee}
 
-class DocDownloader extends Actor with ActorLogging {
+class Downloader extends Actor with ActorLogging {
   val repoUrl = "http://repo1.maven.org/maven2"
   val fileFolderPath = Configuration.root().getString("artifact.path")
   val fileFolder = new File(fileFolderPath)
