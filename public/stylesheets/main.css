@@ -1,7 +1,9 @@
 body {
     padding-top: 50px;
 }
+#typeahead {
 
+}
 .tt-query,
 .tt-hint {
     width: 396px;

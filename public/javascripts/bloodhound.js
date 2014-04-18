@@ -11,7 +11,7 @@ var engine = new Bloodhound({
     },
     datumTokenizer: function(datum) {
         console.log(d);
-        return Bloodhound.tokenizers.obj.whitespace('value');
+        return Bloodhound.tokenizers.obj.whitespace('className');
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace
 });
@@ -22,6 +22,7 @@ $("#typeahead .typeahead").typeahead(null, {
     highlight: true,
     minLength: 1,
     source: engine.ttAdapter(),
+    displayKey: "className",
     templates: {
         empty: [
             '<div class="empty-message">',
