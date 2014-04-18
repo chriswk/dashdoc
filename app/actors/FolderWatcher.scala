@@ -2,9 +2,11 @@ package actors
 
 import akka.actor.{Props, Actor, ActorLogging}
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.nio.file.StandardWatchEventKinds._
 import play.api.libs.concurrent.Akka
 import play.api.Play.current
+import play.Configuration
 import com.beachape.filemanagement.MonitorActor
 import com.beachape.filemanagement.RegistryTypes._
 import com.beachape.filemanagement.Messages._
