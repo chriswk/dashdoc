@@ -16,7 +16,7 @@ var engine = new Bloodhound({
     queryTokenizer: Bloodhound.tokenizers.whitespace
 });
 engine.initialize();
-$("#typeahead .typeahead").typeahead(null, {
+$("#classname").typeahead(null, {
     hint: true,
     name: 'classnames',
     highlight: true,
