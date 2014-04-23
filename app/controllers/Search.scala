@@ -40,7 +40,11 @@ object Search extends Controller {
     val className = searchForm.bindFromRequest().get
     Logger.info(s"Searching for ${className}")
     client.execute {
-      search in "classes" -> "class" query { className.name }
+      search in "classes" -> "class" query {
+        prefix (
+          "className" -> className.name.toLowerCase
+        )
+      }
     }.map(r => {
       Ok(r.toString).as("application/json")
     })
