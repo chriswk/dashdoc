@@ -1,5 +1,3 @@
-package controllers
-
 import com.kenshoo.play.metrics.MetricsFilter
 import play.api.mvc.WithFilters
 

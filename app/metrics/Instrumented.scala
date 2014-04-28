@@ -1,8 +1,9 @@
 package metrics
 
-/**
- * Created by chriswk on 28/04/14.
- */
-trait Instrumented extends nl.grons.metrics.scala.Inst{
+import com.kenshoo.play.metrics.MetricsRegistry
+import nl.grons.metrics.scala.InstrumentedBuilder
+
+trait Instrumented extends InstrumentedBuilder {
+  val metricRegistry = MetricsRegistry.default
 
 }
