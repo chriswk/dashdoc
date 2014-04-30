@@ -8,7 +8,8 @@ object JsRouter extends Controller {
     import routes.javascript._
     Ok(
       Routes.javascriptRouter("jsRoutes")(
-        Search.searchForClassName
+        Search.searchForClassName,
+        Search.browseJson
       )
     ).as("text/javascript")
   }

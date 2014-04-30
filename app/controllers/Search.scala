@@ -50,4 +50,19 @@ object Search extends Controller {
     })
   }
 
+
+  def browse = Action {
+    Ok(views.html.browse("hello"))
+  }
+
+  def browseJson = Action.async {
+    client.execute {
+      search in "classes" -> "class" query {
+        matchall
+      }
+    }.map(r => {
+      Ok(r.toString).as("application/json")
+    })
+  }
+
 }

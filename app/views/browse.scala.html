@@ -1,0 +1,20 @@
+@(message: String)
+@main("All classes") {
+    <table id="classTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>GAV</th>
+                <th>Classname</th>
+                <th>Absolute</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+}{
+<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.dataTables.min.js"))'></script>
+<script type="text/javascript" src="@routes.JsRouter.javascriptRoutes"></script>
+<script type="text/javascript" src='@routes.Assets.at("javascripts/classtable.js")'></script>
+}
