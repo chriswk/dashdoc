@@ -64,12 +64,16 @@ class ElasticIndexer extends Actor with ActorLogging {
           "gav" -> gav,
           "interfaces" -> info.interfaces,
           "methods" -> info.methods.toList,
-          "isConcrete" -> info.isConcrete,
           "isAbstract" -> info.isAbstract,
+          "isConcrete" -> info.isConcrete,
           "isFinal" -> info.isFinal,
           "isInterface" -> info.isInterface,
           "isPrivate" -> info.isPrivate,
-          "classInfo" -> info
+          "isProtected" -> info.isProtected,
+          "isPublic" -> info.isPublic,
+          "isStatic" -> info.isStatic,
+          "isSynchronized" -> info.isSynchronized,
+          "isSynthetic" -> info.isSynthetic
         ) id gav + ":" + info.name
       } onSuccess {
         case res => sender ! IndexComplete(res.getIndex, res.getId, res.getType, res.getVersion)

@@ -12,7 +12,7 @@ function createData(data) {
     console.log(data);
     var data = {
         "aaData": mapData(data),
-        "iTotalRecords": data.hits.total,
+        "iTotalRecords": data.facets.all.count,
         "iTotalDisplayRecords": data.hits.total
     };
     return data;

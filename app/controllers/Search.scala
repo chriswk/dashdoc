@@ -3,7 +3,7 @@ package controllers
 import play.Configuration
 import play.api.mvc._
 import org.elasticsearch.common.settings.ImmutableSettings
-import com.sksamuel.elastic4s.{QueryDefinition, ElasticClient}
+import com.sksamuel.elastic4s.{SortDefinition, QueryDefinition, ElasticClient}
 import com.sksamuel.elastic4s.ElasticDsl._
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -11,6 +11,7 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.libs.json.Json
 import org.elasticsearch.search.{SearchHit, SearchHits}
+import org.elasticsearch.search.sort.SortOrder
 
 
 object Search extends Controller {
@@ -55,14 +56,17 @@ object Search extends Controller {
     Ok(views.html.browse("hello"))
   }
 
+
+
   def browseJson = Action.async { implicit request =>
-    val page = request.getQueryString("sEcho").getOrElse("0").toInt
-    val rowSize = request.getQueryString("iDisplayLength").getOrElse("10").toInt
-    val start = page * rowSize
     client.execute {
       search in "classes" -> "class" query {
         fetchQuery(request.getQueryString("sSearch"))
-      }
+      } facets (
+          facet terms "gavs" field "gav",
+          facet query "all" query { matchall } global true
+      ) sort findSort(request) from getFrom(request) size getRows(request)
+
     }.map(r => {
       Ok(r.toString).as("application/json")
     })
@@ -77,4 +81,26 @@ object Search extends Controller {
       case None => matchall
     }
   }
+
+  def getOrder(option: Option[String]): SortOrder = option match {
+    case Some(order) => order match {
+      case "asc" => SortOrder.ASC
+      case _ => SortOrder.DESC
+    }
+    case None => SortOrder.DESC
+  }
+
+  def findSort(request: Request[AnyContent]): SortDefinition = {
+    val columns = List("className", "absolute", "gav")
+    val sortColumn = request.getQueryString("iSortCol").getOrElse("0").toInt
+
+    val sort = by field columns(sortColumn) order getOrder(request.getQueryString("sSortDir_0"))
+    sort
+
+  }
+
+  def getFrom(request: Request[AnyContent]): Int = request.getQueryString("iDisplayStart").getOrElse("0").toInt
+
+  def getRows(request: Request[AnyContent]): Int = request.getQueryString("iDisplayLength").getOrElse("10").toInt
+
 }
