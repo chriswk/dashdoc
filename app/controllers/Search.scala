@@ -3,7 +3,7 @@ package controllers
 import play.Configuration
 import play.api.mvc._
 import org.elasticsearch.common.settings.ImmutableSettings
-import com.sksamuel.elastic4s.ElasticClient
+import com.sksamuel.elastic4s.{QueryDefinition, ElasticClient}
 import com.sksamuel.elastic4s.ElasticDsl._
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -55,14 +55,26 @@ object Search extends Controller {
     Ok(views.html.browse("hello"))
   }
 
-  def browseJson = Action.async {
+  def browseJson = Action.async { implicit request =>
+    val page = request.getQueryString("sEcho").getOrElse("0").toInt
+    val rowSize = request.getQueryString("iDisplayLength").getOrElse("10").toInt
+    val start = page * rowSize
     client.execute {
       search in "classes" -> "class" query {
-        matchall
+        fetchQuery(request.getQueryString("sSearch"))
       }
     }.map(r => {
       Ok(r.toString).as("application/json")
     })
   }
 
+
+  def fetchQuery(queryString: Option[String]): QueryDefinition = {
+    queryString match {
+      case Some(queryString) => prefix(
+        "className" -> queryString.toLowerCase
+      )
+      case None => matchall
+    }
+  }
 }

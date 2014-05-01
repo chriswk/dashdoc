@@ -34,10 +34,9 @@ $(document).ready(function () {
             });
         },
         "aoColumns": [
-            { "mData": "id"},
-            { "mData": "gav"},
             { "mData": "classname"},
-            { "mData": "absolute"}
+            { "mData": "absolute"},
+            { "mData": "gav"}
         ]
     });
 });
