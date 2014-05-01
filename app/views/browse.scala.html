@@ -1,6 +1,6 @@
 @(message: String)
 @main("All classes") {
-    <table id="classTable" class="table table-striped">
+    <table id="classTable" class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>Classname</th>
@@ -14,8 +14,8 @@
     </table>
 }{
 <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.dataTables.min.js"))'></script>
-<script type='text/javascript' src='@routes.Assets.at("javascripts/datatables/dataTables.bootstrap.js"))'></script>
-<script type='text/javascript' src='@routes.Assets.at("javascripts/datatables/dataTables.bootstrapPagination.js"))'></script>
+<script type='text/javascript' src='@routes.Assets.at("javascripts/dataTables.bootstrap.js")'></script>
+<script type='text/javascript' src='@routes.Assets.at("javascripts/dataTables.bootstrapPagination.js")'></script>
 <script type="text/javascript" src="@routes.JsRouter.javascriptRoutes"></script>
 <script type="text/javascript" src='@routes.Assets.at("javascripts/classtable.js")'></script>
 }
