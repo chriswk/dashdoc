@@ -3,7 +3,6 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Search.browse
 
 # Class search
 
@@ -30,3 +29,4 @@ GET     /webjars/*file                    controllers.WebJarAssets.at(file)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 
+GET     /                           controllers.Search.browse
