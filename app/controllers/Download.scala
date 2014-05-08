@@ -26,7 +26,11 @@ object Download extends Controller {
 
   def download = Action { implicit request =>
     val gavToDownload = downloadForm.bindFromRequest().get
+    val sources = gavToDownload.copy(classifier = Some("sources"))
+    val javadoc = gavToDownload.copy(classifier = Some("javadoc"))
     downloadAction ! gavToDownload
+    downloadAction ! sources
+    downloadAction ! javadoc
     Redirect(routes.Search.searchForClass)
   }
 

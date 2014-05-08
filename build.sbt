@@ -23,9 +23,11 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery" % "1.11.0-1",
   "org.webjars" % "handlebars" % "2.0.0-alpha.2",
   "org.webjars" % "datatables" % "1.10.0-beta-2",
+  "org.webjars" % "highlightjs" % "8.0-3",
   "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test",
   "com.kenshoo" %% "metrics-play" % "0.1.4",
-  "nl.grons" %% "metrics-scala" % "3.1.1_a2.2"
+  "nl.grons" %% "metrics-scala" % "3.1.1_a2.2",
+  "org.apache.commons" % "commons-compress" % "1.8"
 )
 
 play.Project.playScalaSettings
