@@ -7,7 +7,7 @@ import com.sksamuel.elastic4s.ElasticDsl._
 import model._
 import play.Configuration
 import org.elasticsearch.common.settings.ImmutableSettings
-import com.sksamuel.elastic4s.mapping.FieldType.StringType
+import com.sksamuel.elastic4s.mappings.FieldType._
 
 class ElasticIndexer extends Actor with ActorLogging {
   val c = Configuration.root()

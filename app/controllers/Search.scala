@@ -28,7 +28,7 @@ object Search extends Controller {
   case class ClassSearch(name: String)
 
   val searchForm = Form(
-    mapping(
+    play.api.data.Forms.mapping(
       "name" -> text()
     )(ClassSearch.apply)(ClassSearch.unapply)
   )
